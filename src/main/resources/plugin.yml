@@ -1,0 +1,4 @@
+name: stone-to-cobblestone
+version: '${project.version}'
+main: io.github.stonetocobblestone.Stone_to_cobblestone
+api-version: 1.19
