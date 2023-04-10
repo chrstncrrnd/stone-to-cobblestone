@@ -12,6 +12,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -32,9 +34,15 @@ public final class Stone_to_cobblestone extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
         if (event.getHand() == EquipmentSlot.HAND && event.getAction() == Action.RIGHT_CLICK_BLOCK){
-            if (player.getInventory().getItemInMainHand().getType().toString().contains("PICKAXE")){
+            ItemStack mainHand = player.getInventory().getItemInMainHand();
+            if (mainHand.getType().toString().contains("PICKAXE")){
                 assert block != null;
                 if (block.getType() == Material.STONE) {
+                    ItemMeta meta = mainHand.getItemMeta();
+                    if (meta != null) {
+                        ((Damageable)meta).setDamage(((Damageable) meta).getDamage() + 1);
+                        mainHand.setItemMeta(meta);
+                    }
                     player.swingMainHand();
                     block.setType(Material.COBBLESTONE);
                     Sound sound = Sound.ITEM_AXE_STRIP;
